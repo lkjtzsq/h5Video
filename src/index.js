@@ -9,9 +9,41 @@ import util from './js/util';
 require('./css/index.css');
 var comment, favoriate;
 $(() => {
+  var aaa='22';
+  function getVideoData() {
+    var videoData={};
+    $.ajax({ 
+      url: 'http://a1.cyol.com/video/detail',
+      async:false,
+      type: 'post',
+      dataType: "jsonp",
+      jsonp: "callback",
+      data: {
+        key_id: 16
+      },
+      success: function(data) {
+        videoData.avatar_path=data.data.avatar_path;
+        videoData.content=data.data.content;
+        videoData.label=data.data.label;
+        videoData.nickname=data.data.nickname;
+        videoData.publish_date=data.data.publish_date;
+        videoData.read_cnt=data.read_cnt;
+        videoData.title=data.data.title;
+        aaa=data.data.video_url;
+        VideoList.setup({
+          title:data.data.title,
+          publish_date:data.data.publish_date,
+          read_cnt:data.data.read_cnt,
+          content:data.data.content,
+        });
+      }
+    })
+  }
+  getVideoData();
+  console.log(aaa)
   var player = new VideoPlayer({
     "id": "J_prismPlayer",
-    "source": "http://sv.cyol.com/record/2019-01-02/zqlive/front-0d6743775e03e5d67b5fd819d2fc1ae6/front-0d6743775e03e5d67b5fd819d2fc1ae6.m3u8",
+    "source": "",
     "width": "100%",
     "height": "250px",
     "autoplay": false,
@@ -104,7 +136,6 @@ $(() => {
     return liveData;
   }
   var liveDatas = getLiveData();
-  VideoList.setup(liveDatas);
   CommentSender.setup();
   var wrapper = $('.comment-list');
 
