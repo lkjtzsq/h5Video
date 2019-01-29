@@ -9,7 +9,6 @@ import util from './js/util';
 require('./css/index.css');
 var comment, favoriate;
 $(() => {
-  var aaa='22';
   function getVideoData() {
     var videoData={};
     $.ajax({ 
@@ -22,94 +21,103 @@ $(() => {
         key_id: 16
       },
       success: function(data) {
-        videoData.avatar_path=data.data.avatar_path;
-        videoData.content=data.data.content;
-        videoData.label=data.data.label;
-        videoData.nickname=data.data.nickname;
-        videoData.publish_date=data.data.publish_date;
-        videoData.read_cnt=data.read_cnt;
-        videoData.title=data.data.title;
-        aaa=data.data.video_url;
+        console.log(data)
+        // videoData.avatar_path=data.data.avatar_path;
+        // videoData.content=data.data.content;
+        // videoData.desc=data.data.desc;
+        // videoData.label=data.data.label;
+        // videoData.nickname=data.data.nickname;
+        // videoData.publish_date=data.data.publish_date;
+        // videoData.read_cnt=data.read_cnt;
+        // videoData.title=data.data.title;
+        // videoData.video_url=data.data.video_url;
         VideoList.setup({
           title:data.data.title,
           publish_date:data.data.publish_date,
           read_cnt:data.data.read_cnt,
           content:data.data.content,
         });
+        Header.setUp({
+          upic:data.data.thumbnail[0],
+          uname:data.data.nickname,
+          uintro:data.data.desc
+        });
+        $('#poster').attr('src',data.data.avatar_path);
+        var player = new VideoPlayer({
+          "id": "J_prismPlayer",
+          "source": data.data.video_url,
+          "width": "100%",
+          "height": "250px",
+          "autoplay": false,
+          "isLive": false,
+          "cover": data.data.avatar_path,
+          "rePlay": false,
+          "playsinline": true,
+          "preload": true,
+          "controlBarVisibility": "hover",
+          "useH5Prism": true,
+          "skinLayout": [{
+              "name": "H5Loading",
+              "align": "cc"
+            },
+            {
+              "name": "errorDisplay",
+              "align": "tlabs",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "name": "infoDisplay"
+            },
+            {
+              "name": "thumbnail"
+            },
+            {
+              "name": "controlBar",
+              "align": "blabs",
+              "x": 0,
+              "y": 0,
+              "children": [{
+                  "name": "progress",
+                  "align": "blabs",
+                  "x": 0,
+                  "y": 44
+                },
+                {
+                  "name": "playButton",
+                  "align": "tl",
+                  "x": 15,
+                  "y": 12
+                },
+                {
+                  "name": "timeDisplay",
+                  "align": "tl",
+                  "x": 10,
+                  "y": 7
+                },
+                {
+                  "name": "fullScreenButton",
+                  "align": "tr",
+                  "x": 10,
+                  "y": 12
+                },
+                {
+                  "name": "setting",
+                  "align": "tr",
+                  "x": 15,
+                  "y": 12
+                }
+              ]
+            }
+          ]
+        });
+
       }
     })
+    // return videoData;
   }
   getVideoData();
-  console.log(aaa)
-  var player = new VideoPlayer({
-    "id": "J_prismPlayer",
-    "source": "",
-    "width": "100%",
-    "height": "250px",
-    "autoplay": false,
-    "isLive": false,
-    "cover": "http://liveroom-img.oss-cn-qingdao.aliyuncs.com/logo.png",
-    "rePlay": false,
-    "playsinline": true,
-    "preload": true,
-    "controlBarVisibility": "hover",
-    "useH5Prism": true,
-    "skinLayout": [{
-        "name": "H5Loading",
-        "align": "cc"
-      },
-      {
-        "name": "errorDisplay",
-        "align": "tlabs",
-        "x": 0,
-        "y": 0
-      },
-      {
-        "name": "infoDisplay"
-      },
-      {
-        "name": "thumbnail"
-      },
-      {
-        "name": "controlBar",
-        "align": "blabs",
-        "x": 0,
-        "y": 0,
-        "children": [{
-            "name": "progress",
-            "align": "blabs",
-            "x": 0,
-            "y": 44
-          },
-          {
-            "name": "playButton",
-            "align": "tl",
-            "x": 15,
-            "y": 12
-          },
-          {
-            "name": "timeDisplay",
-            "align": "tl",
-            "x": 10,
-            "y": 7
-          },
-          {
-            "name": "fullScreenButton",
-            "align": "tr",
-            "x": 10,
-            "y": 12
-          },
-          {
-            "name": "setting",
-            "align": "tr",
-            "x": 15,
-            "y": 12
-          }
-        ]
-      }
-    ]
-  });
-
+  // console.log(resultData);
   function getUserHeader() {
     var user;
     $.ajax({
@@ -122,7 +130,7 @@ $(() => {
     return user;
   }
   var user = getUserHeader();
-  Header.setUp(user);
+
 
   function getLiveData() {
     var liveData;
